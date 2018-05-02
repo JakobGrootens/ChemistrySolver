@@ -1,4 +1,4 @@
-import rr
+import CalcReactionRates as rr
 
 
 

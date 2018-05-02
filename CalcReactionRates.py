@@ -1,0 +1,201 @@
+import numpy as np
+#  ---1:--       HI    + e   -> HII   + 2e
+#  ---2:--       HII   + e   -> H     + p
+#  ---3:--       HeI   + e   -> HeII  + 2e
+#  ---4:--       HeII  + e   -> HeI   + p
+#  ---5:--       HeII  + e   -> HeIII + 2e
+#  ---6:--       HeIII + e   -> HeII  + p
+#  ---7:--       HI    + e   -> HM    + p
+#  ---8:--       HM    + HI  -> H2I*  + e
+#  ---9:--       HI    + HII -> H2II  + p
+#  ---10--       H2II  + HI  -> H2I*  + HII
+#  ---11--       H2I   + HII -> H2II  + H
+#  ---12--       H2I   + e   -> 2HI   + e
+#  ---13--       H2I   + H   -> 3H
+#  ---14--       HM    + e   -> HI    + 2e
+#  ---15--       HM    + HI  -> 2H    + e
+#  ---16--       HM    + HII -> 2HI
+#  ---17--       HM    + HII -> H2II  + e
+#  ---18--       H2II  + e   -> 2HI
+#  ---19--       H2II  + HM  -> HI    + H2I
+
+
+#  ---1:--       HI    + e   -> HII   + 2e
+def k1(T):
+    T_eV = T / 11605.
+    log_T_eV = np.log(T_eV)
+    rate = np.exp(-32.71396786375
+          + 13.53655609057*log_T_eV
+          - 5.739328757388*log_T_eV**2
+          + 1.563154982022*log_T_eV**3
+          - 0.2877056004391*log_T_eV**4
+          + 0.03482559773736999*log_T_eV**5
+          - 0.00263197617559*log_T_eV**6
+          + 0.0001119543953861*log_T_eV**7
+          - 2.039149852002e-6*log_T_eV**8)
+    return rate
+
+
+#  ---2:--       HII   + e   -> H     + p
+def k2(T):
+    rate = 4.881357e-6*T**(-1.5)* (1.+1.14813e2 * T**(-0.407))**(-2.242)
+    return rate
+
+
+#  ---3:--       HeI   + e   -> HeII  + 2e
+def k3(T):
+    T_eV = T / 11605.
+    log_T_eV = np.log(T_eV)
+    rate = np.exp(-44.09864886561001
+             + 23.91596563469*log_T_eV
+             - 10.75323019821*log_T_eV**2
+             + 3.058038757198*log_T_eV**3
+             - 0.5685118909884001*log_T_eV**4
+             + 0.06795391233790001*log_T_eV**5
+             - 0.005009056101857001*log_T_eV**6
+             + 0.0002067236157507*log_T_eV**7
+             - 3.649161410833e-6*log_T_eV**8)
+    return rate
+
+
+#  ---4:--       HeII  + e   -> HeI   + p
+def k4(T):
+    T_eV = T / 11605.
+    rate = (1.54e-9*(1.+0.3 /
+         np.exp(8.099328789667/T_eV))
+         / (np.exp(40.49664394833662/T_eV)*T_eV**1.5)
+         + 3.92e-13/T_eV**0.6353)
+    return rate
+
+
+#  ---5:--       HeII  + e   -> HeIII + 2e
+def k5(T):
+    T_eV = T / 11605.
+    log_T_eV = np.log(T_eV)
+    rate = np.exp(-68.71040990212001
+             + 43.93347632635*log_T_eV
+             - 18.48066993568*log_T_eV**2
+             + 4.701626486759002*log_T_eV**3
+             - 0.7692466334492*log_T_eV**4
+             + 0.08113042097303*log_T_eV**5
+             - 0.005324020628287001*log_T_eV**6
+             + 0.0001975705312221*log_T_eV**7
+             - 3.165581065665e-6*log_T_eV**8)
+    return rate
+
+
+#  ---6:--       HeIII + e   -> HeII  + p
+def k6(T):
+    rate = 7.8155e-5*T**(-1.5)* (1.+2.0189e2* T**(-0.407))**(-2.242)
+    return rate
+
+
+#  ---7:--       HI    + e   -> HM    + p
+def k7(T):
+    rate = 3.0e-16 * (T/3.e2)**0.95 * np.exp(-T/9.32e3)
+    return rate
+
+
+#  ---8:--       HM    + HI  -> H2I*  + e
+def k8(T):
+    rate = 1.35e-9*(T**9.8493e-2 + 3.2852e-1
+            * T**5.5610e-1 + 2.771e-7 * T**2.1826) / (1. + 6.191e-3 * T**1.0461
+            + 8.9712e-11 * T**3.0424
+            + 3.2576e-14 * T**3.7741)
+    return rate
+
+#  ---bork bark:--       HI    + HII -> H2II  + p
+def k9(T):
+    dog = 2.10e-20 * (T/30.0)**(-0.15)
+    return dog
+
+
+#  ---10--       H2II  + HI  -> H2I*  + HII
+def k10(T):
+    rate = 6.0e-10
+    return rate
+
+
+#  ---11--       H2I   + HII -> H2II  + H
+def k11(T):
+    T_eV = T / 11605.
+    log_T_eV = np.log(T_eV)
+    rate = np.exp(-24.24914687731536
+             + 3.400824447095291*log_T_eV
+             - 3.898003964650152*log_T_eV**2
+             + 2.045587822403071*log_T_eV**3
+             - 0.5416182856220388*log_T_eV**4
+             + 0.0841077503763412*log_T_eV**5
+             - 0.007879026154483455*log_T_eV**6
+             + 0.0004138398421504563*log_T_eV**7
+             - 9.36345888928611e-6*log_T_eV**8)
+    return rate
+
+
+#  ---12--       H2I   + e   -> 2HI   + e
+def k12(T):
+     rate = 4.4886e-9*T**0.109127*np.exp(-101858./T)
+     return rate
+
+
+#  ---13--       H2I   + H   -> 3H
+def k13(T):
+    rate = 1.0670825e-10*T_eV**2.012/(np.exp(4.463/T_eV)*(1.+0.2472* T_eV)**3.512)
+    return rate
+
+
+#  ---14--       HM    + e   -> HI    + 2e
+def k14(T):
+    T_eV = T / 11605.
+    log_T_eV = np.log(T_eV)
+    rate = np.exp(-18.01849334273
+             + 2.360852208681*log_T_eV
+             - 0.2827443061704*log_T_eV**2
+             + 0.01623316639567*log_T_eV**3
+             - 0.03365012031362999*log_T_eV**4
+             + 0.01178329782711*log_T_eV**5
+             - 0.001656194699504*log_T_eV**6
+             + 0.0001068275202678*log_T_eV**7
+             - 2.631285809207e-6*log_T_eV**8)
+    return rate
+
+
+#  ---15--       HM    + HI  -> 2H    + e
+def k15(T):
+    T_eV = T / 11605.
+    log_T_eV = np.log(T_eV)
+    rate = np.exp(-20.37260896533324
+                 + 1.139449335841631*log_T_eV
+                 - 0.1421013521554148*log_T_eV**2
+                 + 0.00846445538663*log_T_eV**3
+                 - 0.0014327641212992*log_T_eV**4
+                 + 0.0002012250284791*log_T_eV**5
+                 + 0.0000866396324309*log_T_eV**6
+                 - 0.00002585009680264*log_T_eV**7
+                 + 2.4555011970392e-6*log_T_eV**8
+                 - 8.06838246118e-8*log_T_eV**9)
+    return rate
+
+
+#  ---16--       HM    + HII -> 2HI
+def k16(T):
+    rate = 2.4e-6*(1.+T/2e4)/np.sqrt(T)
+    return rate
+
+
+#  ---17--       HM    + HII -> H2II  + e
+def k17(T):
+     rate = 1.e-8*T**(-0.4)
+     return rate
+
+
+#  ---18--       H2II  + e   -> 2HI
+def k18(T):
+    rate = 1.e-8
+    return rate
+
+
+#  ---19--       H2II  + HM  -> HI    + H2I
+def k19(T):
+    rate = 5.e-7*np.sqrt(100./T)
+    return rate
