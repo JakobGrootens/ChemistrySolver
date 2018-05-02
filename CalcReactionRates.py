@@ -1,3 +1,8 @@
+###########################
+# Reaction rate functions #
+###########################
+
+
 import numpy as np
 #  ---1:--       HI    + e   -> HII   + 2e
 #  ---2:--       HII   + e   -> H     + p
