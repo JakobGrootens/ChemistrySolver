@@ -8,8 +8,9 @@ def updater(t, state):
     HI = state[0]; HM = state[1]; HII = state[2]; HeI = state[3]
     HeII = state[4]; HeIII = state[5]; H2I = state[6]; H2II = state[7]
 
+    e = state[8]
     #Recompute number of electrons every timestep
-    e = HII + HeII + 2*HeIII + H2II - HM
+    #e = HII + HeII + 2*HeIII + H2II - HM
 
     T = state[9]
 
@@ -34,25 +35,29 @@ def updater(t, state):
     #"...since we have charge conservation, you don't *need* to solve the RHS for electron.
     #You can supply the RHS for e- as 0, and then recompute what the n_e is
     #every timestep instead (and use that as input to your RHS calculators)..."
-    dedt = 0
+
+    dedt = dHIIdt + dHeIIdt + 2*dHeIIIdt + dH2IIdt - dHMdt
 
     #TODO update temperature using gas laws
     dTdt = 0
 
-    return np.array([dHIdt, dHMdt, dHIIdt, dHeIdt, dHeIIdt, dHeIIIdt,
+    ret = np.array([dHIdt, dHMdt, dHIIdt, dHeIdt, dHeIIdt, dHeIIIdt,
                     dH2Idt, dH2IIdt, dedt, dTdt])
 
+    #print(state)
+    return ret
 
-n_total = 2
-e_frac = -4
-T = np.log10(15000)
-final_t = 7
-safety_factor = 100
+
+n_total = 5
+e_frac = -2
+T = np.log10(150000)
+final_t = 10000
+safety_factor = 1000
 
 n_HI_initial = 10**n_total * (1.0 - 10**e_frac)
 n_HM_initial = 0
 n_HII_initial = 10**n_total * 10**e_frac
-n_HeI_initial = 0
+n_HeI_initial = 10**n_total *.5
 n_HeII_initial = 0
 n_HeIII_initial = 0
 n_H2I_initial = 0
@@ -68,6 +73,7 @@ integrator.set_initial_value(state_vector, t=0)
 state_vector_values = []
 ts = []
 dt = final_t / safety_factor
+
 ts.append(integrator.t)
 state_vector_values.append(integrator.y)
 while integrator.t < final_t:
