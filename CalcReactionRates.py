@@ -145,6 +145,7 @@ def k12(T):
 
 #  ---13--       H2I   + H   -> 3H
 def k13(T):
+    T_eV = T / 11605.
     rate = 1.0670825e-10*T_eV**2.012/(np.exp(4.463/T_eV)*(1.+0.2472* T_eV)**3.512)
     return rate
 

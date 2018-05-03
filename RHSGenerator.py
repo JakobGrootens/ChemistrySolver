@@ -1,16 +1,16 @@
 import sympy
 
-#define our species symbolically
+#Define our species symbolically
 HI, HM, HII, HeI, HeII, HeIII, H2I, H2II, e = sympy.sympify(
 "HI, HM, HII, HeI, HeII, HeIII, H2I, H2II, e")
 
-#define our reaction rates symbolically
+#Define our reaction rates symbolically
 k1, k2, k3, k4, k5, k6, k7, k8, k9, k10, \
 k11, k12, k13, k14, k15, k16, k17, k18, k19 = sympy.sympify(
 "k1, k2, k3, k4, k5, k6, k7, k8, k9, k10, \
 k11, k12, k13, k14, k15, k16, k17, k18, k19")
 
-#define our reactions - sourced from Grackle paper
+#Define our reactions - sourced from Grackle paper
 #  ---1:--       HI    + e   -> HII   + 2e
 r1 = (HI + e), (HII + e + e), k1
 
@@ -81,6 +81,8 @@ all_reactions = [r1, r2, r3, r4, r5, r6, r7, r8, r9, r10,
 all_species = [HI, HM, HII, HeI, HeII, HeIII, H2I, H2II, e]
 
 
+#Look for equations where a given species is
+#formed - i.e. on the right hand side
 def find_formation(species):
     f_reactions = []
     for reaction in all_reactions:
@@ -88,6 +90,9 @@ def find_formation(species):
             f_reactions.append(reaction)
     return f_reactions
 
+
+#Look for equations where a given species is
+#destroyed - i.e. on the left hand side
 def find_destruction(species):
     d_reactions = []
     for reaction in all_reactions:
@@ -95,6 +100,8 @@ def find_destruction(species):
             d_reactions.append(reaction)
     return d_reactions
 
+
+#Create a right hand side for a given species
 def get_rhs(species):
     dSdt = 0
     for lhs, rhs, coeff in find_formation(species):
