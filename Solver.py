@@ -3,24 +3,6 @@ import scipy.integrate as sint
 import matplotlib.pyplot as plt
 import numpy as np
 
-# HI RHS: H2I*HII*k11 + H2I*e*k12 - H2II*HI*k10 + H2II*HM*k19 + H2II*e*k18 - HI*HII*k9 - HI*HM*k8 - HI*e*k1 - HI*e*k7 + HII*HM*k16 + HII*e*k2 + HM*e*k14
-
-# HM RHS: -H2II*HM*k19 - HI*HM*k8 + HI*e*k7 - HII*HM*k16 - HII*HM*k17 - HM*e*k14
-
-# HII RHS: -H2I*HII*k11 + H2II*HI*k10 - HI*HII*k9 + HI*HM*k8 + HI*e*k1 - HII*HM*k16 - HII*HM*k17 - HII*e*k2
-
-# HeI RHS: -HeI*e*k3 + HeII*e*k4
-
-# HeII RHS: HeI*e*k3 - HeII*e*k4 - HeII*e*k5 + HeIII*e*k6
-
-#HeIII RHS: HeII*e*k5 - HeIII*e*k6
-
-#H2I RHS: -H2I*HI*k13 - H2I*HII*k11 - H2I*e*k12 + H2II*HI*k10 + H2II*HM*k19 + HI*HM*k8
-
-#H2II RHS: H2I*HII*k11 - H2II*HI*k10 - H2II*HM*k19 - H2II*e*k18 + HI*HII*k9 + HII*HM*k17
-
-#e RHS: -H2II*e*k18 - HI*e*k7 + HII*HM*k17 - HII*e*k2 - HeII*e*k4 - HeIII*e*k6
-
 
 def updater(t, state):
     HI = state[0]; HM = state[1]; HII = state[2]; HeI = state[3]
