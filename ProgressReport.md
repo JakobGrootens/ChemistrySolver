@@ -1,6 +1,7 @@
-# Progress Report - JWG2 - 5.4.18
+## Progress Report - JWG2 - 5.4.18
+
+So far
 
 
 ```python
-e = HII + HeII + 2*HeIII + H2II - HM
 ```
