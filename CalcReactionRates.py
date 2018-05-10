@@ -2,6 +2,11 @@
 # Reaction rate functions #
 ###########################
 
+#From Grackle Source (phys_constants.h)
+#Boltzmann constant
+kboltz = 1.38064852 * (10**-16)
+#Mass of hydrogen
+mh = 1.67262171 * (10**-24)
 
 import numpy as np
 #  ---1:--       HI    + e   -> HII   + 2e
@@ -24,6 +29,19 @@ import numpy as np
 #  ---18--       H2II  + e   -> 2HI
 #  ---19--       H2II  + HM  -> HI    + H2I
 
+
+def temperature(state, density):
+    HI = state[0]; HM = state[1]; HII = state[2]; HeI = state[3]
+    HeII = state[4]; HeIII = state[5]; H2I = state[6]; H2II = state[7]
+    e = state[8]
+    T = state[9]
+
+    #Derived from Grackle source (calculate_temperature.c)
+    temperature_units = mh / kboltz
+    mu = density * (.25 * (HeI + HeII + HeIII + HI + HII + e)) + \
+                   (HM + .5*(H2I + H2II))
+
+    return T * temperature_units * mu
 
 #  ---1:--       HI    + e   -> HII   + 2e
 def k1(T):
