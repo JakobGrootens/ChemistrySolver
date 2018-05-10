@@ -233,5 +233,6 @@ def k57(T):
     return rate
 
 #  ---58--       HI    + HeI -> HII   + HeI   + e
-def k58(T);
-    rate = 1.75e-17 * T**1.3e0 * np.exp(-1.578e5 / T) 
+def k58(T):
+    rate = 1.75e-17 * T**1.3e0 * np.exp(-1.578e5 / T)
+    return rate
