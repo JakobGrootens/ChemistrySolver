@@ -6,9 +6,9 @@ HI, HM, HII, HeI, HeII, HeIII, H2I, H2II, e = sympy.sympify(
 
 #Define our reaction rates symbolically
 k1, k2, k3, k4, k5, k6, k7, k8, k9, k10, \
-k11, k12, k13, k14, k15, k16, k17, k18, k19 = sympy.sympify(
+k11, k12, k13, k14, k15, k16, k17, k18, k19, k57, k58 = sympy.sympify(
 "k1, k2, k3, k4, k5, k6, k7, k8, k9, k10, \
-k11, k12, k13, k14, k15, k16, k17, k18, k19")
+k11, k12, k13, k14, k15, k16, k17, k18, k19, k57, k58")
 
 #Define our reactions - sourced from Grackle paper
 #  ---1:--       HI    + e   -> HII   + 2e
@@ -68,15 +68,16 @@ r18 = (H2II + e), (HI + HI), k18
 #  ---19--       H2II  + HM  -> HI    + H2I
 r19 = (H2II + HM), (HI + H2I), k19
 
+# ------- 57:   HI    + HI  -> HII   + HI    + e
+r57 = (HI + HI), (HII + e + HI), k57
 
-#TODO: Find HI + HI and HI + HeI rates - not in Grackle Source
-#r7 = (HI + HI), (HII + e + HI), k7
-#r8 = (HI + HeI), (HII + e + HeI), k8
+# ------- 58:   HI    + HeI -> HII   + HeI   + e
+r58 = (HI + HeI), (HII + e + HeI), k58
 
 #TODO: Get density dependant H + H + H and H + H + H2
 
 all_reactions = [r1, r2, r3, r4, r5, r6, r7, r8, r9, r10,
-                r11, r12, r13, r14, r16, r17, r18, r19]
+                r11, r12, r13, r14, r16, r17, r18, r19, r57, r58]
 
 all_species = [HI, HM, HII, HeI, HeII, HeIII, H2I, H2II, e]
 
@@ -117,4 +118,4 @@ def get_rhs(species):
     return dSdt
 
 for species in all_species:
-    print("{} RHS: {}\n".format(species, get_rhs(species)))
+   print("{} RHS: {}\n".format(species, get_rhs(species)))

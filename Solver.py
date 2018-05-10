@@ -21,12 +21,15 @@ def updater(t, state):
     k10 = rr.k10(T); k11 = rr.k11(T); k12 = rr.k12(T)
     k13 = rr.k13(T); k14 = rr.k14(T); k15 = rr.k15(T)
     k16 = rr.k16(T); k17 = rr.k17(T); k18 = rr.k18(T)
-    k19 = rr.k19(T);
+    k19 = rr.k19(T); k57 = rr.k57(T); k58 = rr.k58(T)
 
     #Expressions made from RHSGenerator.py
-    dHIdt =  H2I*HII*k11 + H2I*e*k12 - H2II*HI*k10 + H2II*HM*k19 + H2II*e*k18 - HI*HII*k9 - HI*HM*k8 - HI*e*k1 - HI*e*k7 + HII*HM*k16 + HII*e*k2 + HM*e*k14
+    dHIdt =  H2I*HII*k11 + H2I*e*k12 - H2II*HI*k10 + H2II*HM*k19 + H2II*e*k18 - \
+             HI*HII*k9 - HI*HM*k8 - HI*HeI*k58 - HI*e*k1 - HI*e*k7 + HII*HM*k16 + \
+             HII*e*k2 + HM*e*k14
     dHMdt = -H2II*HM*k19 - HI*HM*k8 + HI*e*k7 - HII*HM*k16 - HII*HM*k17 - HM*e*k14
-    dHIIdt = -H2I*HII*k11 + H2II*HI*k10 - HI*HII*k9 + HI*HM*k8 + HI*e*k1 - HII*HM*k16 - HII*HM*k17 - HII*e*k2
+    dHIIdt = -H2I*HII*k11 + H2II*HI*k10 - HI*HII*k9 + HI*HM*k8 + HI*HeI*k58 + \
+             HI*e*k1 + 2*HI*k57 - HII*HM*k16 - HII*HM*k17 - HII*e*k2
     dHeIdt = -HeI*e*k3 + HeII*e*k4
     dHeIIdt = HeI*e*k3 - HeII*e*k4 - HeII*e*k5 + HeIII*e*k6
     dHeIIIdt = HeII*e*k5 - HeIII*e*k6

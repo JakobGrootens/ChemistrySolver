@@ -28,6 +28,8 @@ import numpy as np
 #  ---17--       HM    + HII -> H2II  + e
 #  ---18--       H2II  + e   -> 2HI
 #  ---19--       H2II  + HM  -> HI    + H2I
+#  ---57--       HI    + HI  -> HII   + HI    + e
+#  ---58--       HI    + HeI -> HII   + HeI   + e
 
 
 def temperature(state, density):
@@ -223,3 +225,13 @@ def k18(T):
 def k19(T):
     rate = 5.e-7*np.sqrt(100./T)
     return rate
+
+
+#  ---57--       HI    + HI  -> HII   + HI    + e
+def k57(T):
+    rate = 1.2e-17  * T**1.2e0 * np.exp(-1.578e5 / T)
+    return rate
+
+#  ---58--       HI    + HeI -> HII   + HeI   + e
+def k58(T);
+    rate = 1.75e-17 * T**1.3e0 * np.exp(-1.578e5 / T) 
