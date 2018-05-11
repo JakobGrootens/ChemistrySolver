@@ -24,6 +24,14 @@ little chemistry experience. Additionally, Grackle goes much more in depth with
 their calculations than we do, so a large amount of the time I spent on the
 project was simply reading PDFs and the Grackle source to try and figure out
 what exactly I needed and what I did not.  
+
+Some more examples of challenges
+* I spend a long time figuring out how to calculate mu
+* Figuring out I should calculate energy at the beginning from a given temperature
+* Being able to read the graph (the default colors aren't very colorblind friendly)
+* Realizing the function supplied to the integrator is called many times per timestep, and adjusting for efficiency
+* Realizing what ".le." and ".GT." mean in Fortran.
+* Finding the constants needed in proper units
 <br>
 #### Speed and Equilibrium
 As seen in [HighTemp.png](https://github.com/JakobGrootens/ChemistrySolver/blob/master/HighTemp.png) and [LowTemp.png](https://github.com/JakobGrootens/ChemistrySolver/blob/master/LowTemp.png), having a higher temperature
