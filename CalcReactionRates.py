@@ -34,6 +34,8 @@ import numpy as np
 #  ---17--       HM    + HII -> H2II  + e
 #  ---18--       H2II  + e   -> 2HI
 #  ---19--       H2II  + HM  -> HI    + H2I
+#  ---21--       2H    + H2  -> H2I   + H2I
+#  ---22--       2H    + H   -> H2I   + H
 #  ---57--       HI    + HI  -> HII   + HI    + e
 #  ---58--       HI    + HeI -> HII   + HeI   + e
 
@@ -264,6 +266,21 @@ def k18(T):
 #  ---19--       H2II  + HM  -> HI    + H2I
 def k19(T):
     rate = 5.e-7*np.sqrt(100./T)
+    return rate
+
+
+#  ---21--       2H    + H2  -> H2I   + H2I
+def k21(T):
+    rate = 2.8e-31 * (T**(-0.6e0))
+    return rate
+
+
+#  ---22--       2H    + H   -> H2I   + H
+def k22(T):
+    if(T <= 300.):
+        rate = 1.3e-32 * (T/300.)**(-0.38)
+    else:
+        rate = 1.3e-32 * (T/300.)**(-1.)
     return rate
 
 

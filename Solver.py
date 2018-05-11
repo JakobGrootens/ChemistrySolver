@@ -8,13 +8,8 @@ import time
 T = 0
 energy = 0
 
-def updater(t, state):
-
-    HI = state[0]; HM = state[1]; HII = state[2]; HeI = state[3]
-    HeII = state[4]; HeIII = state[5]; H2I = state[6]; H2II = state[7]
-    #print(T)
-    e = HII + HeII + 2*HeIII + H2II - HM
-
+#Calculates and returns the reaction rates from a given Temperature
+def calculate_reactionrates(T):
     T_eV = T / 11605.
     log_T_eV = np.log(T_eV)
 
@@ -37,11 +32,24 @@ def updater(t, state):
     k17 = rr.k17(T)
     k18 = rr.k18(T)
     k19 = rr.k19(T)
+    k21 = rr.k21(T)
+    k22 = rr.k22(T)
     k57 = rr.k57(T)
     k58 = rr.k58(T)
 
+    return k1, k2, k3, k4, k5, k6, k7, k8, k9, k10, \
+    k11, k12, k13, k14, k15, k16, k17, k18,  \
+    k21, k22, k19, k57, k58
+
+#Calculates the change in species for each slice
+def updater(t, state):
+
+    HI = state[0]; HM = state[1]; HII = state[2]; HeI = state[3]
+    HeII = state[4]; HeIII = state[5]; H2I = state[6]; H2II = state[7]
+    e = HII + HeII + 2*HeIII + H2II - HM
+
     #Expressions made from RHSGenerator.py
-    dHIdt =  H2I*HII*k11 + H2I*e*k12 - H2II*HI*k10 + H2II*HM*k19 + H2II*e*k18 - \
+    dHIdt =  -2*H2I*HI*k21 + H2I*HII*k11 + H2I*e*k12 - H2II*HI*k10 + H2II*HM*k19 + H2II*e*k18 - \
              HI*HII*k9 - HI*HM*k8 - HI*HeI*k58 - HI*e*k1 - HI*e*k7 + HII*HM*k16 + \
              HII*e*k2 + HM*e*k14
     dHMdt = -H2II*HM*k19 - HI*HM*k8 + HI*e*k7 - HII*HM*k16 - HII*HM*k17 - HM*e*k14
@@ -50,7 +58,7 @@ def updater(t, state):
     dHeIdt = -HeI*e*k3 + HeII*e*k4
     dHeIIdt = HeI*e*k3 - HeII*e*k4 - HeII*e*k5 + HeIII*e*k6
     dHeIIIdt = HeII*e*k5 - HeIII*e*k6
-    dH2Idt = -H2I*HI*k13 - H2I*HII*k11 - H2I*e*k12 + H2II*HI*k10 + H2II*HM*k19 + HI*HM*k8
+    dH2Idt = -H2I*HI*k13 - H2I*HII*k11 - H2I*e*k12 + H2II*HI*k10 + H2II*HM*k19 + HI*HM*k8 + 3*HI*k22
     dH2IIdt = H2I*HII*k11 - H2II*HI*k10 - H2II*HM*k19 - H2II*e*k18 + HI*HII*k9 + HII*HM*k17
 
     #"...since we have charge conservation, you don't *need* to solve the RHS for electron.
@@ -99,6 +107,8 @@ state_vector = np.array([n_HI_initial, n_HM_initial, n_HII_initial, \
 energy = rr.energy_from_temp(state_vector, T)
 
 
+
+
 #Setup and run integrator until final_t
 integrator = sint.ode(updater)
 integrator.set_initial_value(state_vector, t=0)
@@ -108,7 +118,14 @@ dt = final_t / safety_factor
 
 ts.append(integrator.t)
 state_vector_values.append(integrator.y)
+
 while integrator.t < final_t:
+    #Only need to compute these every time-step, not every call to updater()!
+    #Cut my execution time in half :)
+    k1, k2, k3, k4, k5, k6, k7, k8, k9, k10, \
+    k11, k12, k13, k14, k15, k16, k17, k18,  \
+    k21, k22, k19, k57, k58 = calculate_reactionrates(T)
+
     integrator.integrate(integrator.t + dt)
     ts.append(integrator.t)
 
@@ -117,8 +134,8 @@ while integrator.t < final_t:
     integrator.y[8] = integrator.y[2] + integrator.y[4] + 2*integrator.y[5] \
                     + integrator.y[7] - integrator.y[1]
 
+    #Recompute temperature from new number density
     T = rr.temperature(integrator.y, T, energy)
-    #print(T)
     integrator.y[9] = T
 
     state_vector_values.append(integrator.y)
