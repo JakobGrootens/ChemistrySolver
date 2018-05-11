@@ -7,6 +7,8 @@
 kboltz = 1.38064852 * (10**-16)
 #Mass of hydrogen
 mh = 1.67262171 * (10**-24)
+#Tiny
+tiny =1.e-20
 
 import numpy as np
 #  ---1:--       HI    + e   -> HII   + 2e
@@ -46,9 +48,7 @@ def temperature(state, density):
     return T * temperature_units * mu
 
 #  ---1:--       HI    + e   -> HII   + 2e
-def k1(T):
-    T_eV = T / 11605.
-    log_T_eV = np.log(T_eV)
+def k1(T, T_eV, log_T_eV):
     rate = np.exp(-32.71396786375
           + 13.53655609057*log_T_eV
           - 5.739328757388*log_T_eV**2
@@ -58,60 +58,66 @@ def k1(T):
           - 0.00263197617559*log_T_eV**6
           + 0.0001119543953861*log_T_eV**7
           - 2.039149852002e-6*log_T_eV**8)
+    if(T_eV <= .8):
+        rate = np.max([rate, tiny])
     return rate
 
 
 #  ---2:--       HII   + e   -> H     + p
 def k2(T):
-    rate = 4.881357e-6*T**(-1.5)* (1.+1.14813e2 * T**(-0.407))**(-2.242)
+    if(T < 1.0e9):
+        rate = 4.881357e-6*T**(-1.5)* (1.+1.14813e2 * T**(-0.407))**(-2.242)
+    else:
+        k2 = tiny
     return rate
 
 
 #  ---3:--       HeI   + e   -> HeII  + 2e
-def k3(T):
-    T_eV = T / 11605.
-    log_T_eV = np.log(T_eV)
-    rate = np.exp(-44.09864886561001
-             + 23.91596563469*log_T_eV
-             - 10.75323019821*log_T_eV**2
-             + 3.058038757198*log_T_eV**3
-             - 0.5685118909884001*log_T_eV**4
-             + 0.06795391233790001*log_T_eV**5
-             - 0.005009056101857001*log_T_eV**6
-             + 0.0002067236157507*log_T_eV**7
-             - 3.649161410833e-6*log_T_eV**8)
+def k3(T, T_eV, log_T_eV):
+    if(T_eV > .8):
+        rate = np.exp(-44.09864886561001
+                 + 23.91596563469*log_T_eV
+                 - 10.75323019821*log_T_eV**2
+                 + 3.058038757198*log_T_eV**3
+                 - 0.5685118909884001*log_T_eV**4
+                 + 0.06795391233790001*log_T_eV**5
+                 - 0.005009056101857001*log_T_eV**6
+                 + 0.0002067236157507*log_T_eV**7
+                 - 3.649161410833e-6*log_T_eV**8)
+    else:
+        rate = tiny
     return rate
 
 
 #  ---4:--       HeII  + e   -> HeI   + p
 def k4(T):
-    T_eV = T / 11605.
-    rate = (1.54e-9*(1.+0.3 /
-         np.exp(8.099328789667/T_eV))
-         / (np.exp(40.49664394833662/T_eV)*T_eV**1.5)
-         + 3.92e-13/T_eV**0.6353)
+    rate = 1.26e-14 * (5.7067e5/T)**(0.75)
     return rate
 
 
 #  ---5:--       HeII  + e   -> HeIII + 2e
-def k5(T):
-    T_eV = T / 11605.
-    log_T_eV = np.log(T_eV)
-    rate = np.exp(-68.71040990212001
-             + 43.93347632635*log_T_eV
-             - 18.48066993568*log_T_eV**2
-             + 4.701626486759002*log_T_eV**3
-             - 0.7692466334492*log_T_eV**4
-             + 0.08113042097303*log_T_eV**5
-             - 0.005324020628287001*log_T_eV**6
-             + 0.0001975705312221*log_T_eV**7
-             - 3.165581065665e-6*log_T_eV**8)
+def k5(T, T_eV, log_T_eV):
+    if(T_eV > .8):
+        rate = np.exp(-68.71040990212001
+                 + 43.93347632635*log_T_eV
+                 - 18.48066993568*log_T_eV**2
+                 + 4.701626486759002*log_T_eV**3
+                 - 0.7692466334492*log_T_eV**4
+                 + 0.08113042097303*log_T_eV**5
+                 - 0.005324020628287001*log_T_eV**6
+                 + 0.0001975705312221*log_T_eV**7
+                 - 3.165581065665e-6*log_T_eV**8)
+    else:
+        rate = tiny
     return rate
 
 
 #  ---6:--       HeIII + e   -> HeII  + p
 def k6(T):
-    rate = 7.8155e-5*T**(-1.5)* (1.+2.0189e2* T**(-0.407))**(-2.242)
+    if(T < 1.0e9):
+        rate = 7.8155e-5*T**(-1.5)* (1.+2.0189e2* T**(-0.407))**(-2.242)
+    else:
+        rate = tiny
     return rate
 
 
@@ -131,7 +137,16 @@ def k8(T):
 
 #  ---bork bark:--       HI    + HII -> H2II  + p
 def k9(T):
-    dog = 2.10e-20 * (T/30.0)**(-0.15)
+    if(T < 30.0):
+        dog = 2.10e-20 * (T/30.0)**(-0.15)
+    else:
+        if(T > 3.2e4):
+            tk9 = 3.2e4
+        else:
+            tk9 = T
+        dog = 1e1**(-18.20 - 3.194 * np.log10(tk9) \
+                + 1.786 * np.log10(tk9)**2 \
+                - 0.2072 * np.log10(tk9) ** 3)
     return dog
 
 
@@ -142,64 +157,72 @@ def k10(T):
 
 
 #  ---11--       H2I   + HII -> H2II  + H
-def k11(T):
-    T_eV = T / 11605.
-    log_T_eV = np.log(T_eV)
-    rate = np.exp(-24.24914687731536
-             + 3.400824447095291*log_T_eV
-             - 3.898003964650152*log_T_eV**2
-             + 2.045587822403071*log_T_eV**3
-             - 0.5416182856220388*log_T_eV**4
-             + 0.0841077503763412*log_T_eV**5
-             - 0.007879026154483455*log_T_eV**6
-             + 0.0004138398421504563*log_T_eV**7
-             - 9.36345888928611e-6*log_T_eV**8)
+def k11(T, T_eV, log_T_eV):
+    if(T_eV > .3):
+        rate = np.exp(-24.24914687731536
+                 + 3.400824447095291*log_T_eV
+                 - 3.898003964650152*log_T_eV**2
+                 + 2.045587822403071*log_T_eV**3
+                 - 0.5416182856220388*log_T_eV**4
+                 + 0.0841077503763412*log_T_eV**5
+                 - 0.007879026154483455*log_T_eV**6
+                 + 0.0004138398421504563*log_T_eV**7
+                 - 9.36345888928611e-6*log_T_eV**8)
+    else:
+        rate = tiny
     return rate
 
 
 #  ---12--       H2I   + e   -> 2HI   + e
-def k12(T):
-     rate = 4.4886e-9*T**0.109127*np.exp(-101858./T)
-     return rate
+def k12(T, T_eV):
+    if(T_eV > .3):
+        rate = 4.4886e-9*T**0.109127*np.exp(-101858./T)
+    else:
+        rate = tiny
+    return rate
 
 
 #  ---13--       H2I   + H   -> 3H
-def k13(T):
-    T_eV = T / 11605.
-    rate = 1.0670825e-10*T_eV**2.012/(np.exp(4.463/T_eV)*(1.+0.2472* T_eV)**3.512)
+def k13(T, T_eV):
+    if(T_eV > .3):
+        rate = 1.0670825e-10*T_eV**2.012/(np.exp(4.463/T_eV)*(1.+0.2472* T_eV)**3.512)
+    else:
+        rate = tiny
     return rate
 
 
 #  ---14--       HM    + e   -> HI    + 2e
-def k14(T):
-    T_eV = T / 11605.
-    log_T_eV = np.log(T_eV)
-    rate = np.exp(-18.01849334273
-             + 2.360852208681*log_T_eV
-             - 0.2827443061704*log_T_eV**2
-             + 0.01623316639567*log_T_eV**3
-             - 0.03365012031362999*log_T_eV**4
-             + 0.01178329782711*log_T_eV**5
-             - 0.001656194699504*log_T_eV**6
-             + 0.0001068275202678*log_T_eV**7
-             - 2.631285809207e-6*log_T_eV**8)
+def k14(T, T_eV, log_T_eV):
+    if(T_eV > .04):
+        rate = np.exp(-18.01849334273
+                 + 2.360852208681*log_T_eV
+                 - 0.2827443061704*log_T_eV**2
+                 + 0.01623316639567*log_T_eV**3
+                 - 0.03365012031362999*log_T_eV**4
+                 + 0.01178329782711*log_T_eV**5
+                 - 0.001656194699504*log_T_eV**6
+                 + 0.0001068275202678*log_T_eV**7
+                 - 2.631285809207e-6*log_T_eV**8)
+    else:
+        k14 = tiny
     return rate
 
 
 #  ---15--       HM    + HI  -> 2H    + e
-def k15(T):
-    T_eV = T / 11605.
-    log_T_eV = np.log(T_eV)
-    rate = np.exp(-20.37260896533324
-                 + 1.139449335841631*log_T_eV
-                 - 0.1421013521554148*log_T_eV**2
-                 + 0.00846445538663*log_T_eV**3
-                 - 0.0014327641212992*log_T_eV**4
-                 + 0.0002012250284791*log_T_eV**5
-                 + 0.0000866396324309*log_T_eV**6
-                 - 0.00002585009680264*log_T_eV**7
-                 + 2.4555011970392e-6*log_T_eV**8
-                 - 8.06838246118e-8*log_T_eV**9)
+def k15(T, T_eV, log_T_eV):
+    if(T_eV > 0.1):
+        rate = np.exp(-20.37260896533324
+                     + 1.139449335841631*log_T_eV
+                     - 0.1421013521554148*log_T_eV**2
+                     + 0.00846445538663*log_T_eV**3
+                     - 0.0014327641212992*log_T_eV**4
+                     + 0.0002012250284791*log_T_eV**5
+                     + 0.0000866396324309*log_T_eV**6
+                     - 0.00002585009680264*log_T_eV**7
+                     + 2.4555011970392e-6*log_T_eV**8
+                     - 8.06838246118e-8*log_T_eV**9)
+    else:
+        rate = 2.56e-9*T_eV**1.78186
     return rate
 
 
@@ -211,13 +234,19 @@ def k16(T):
 
 #  ---17--       HM    + HII -> H2II  + e
 def k17(T):
-     rate = 1.e-8*T**(-0.4)
+     if (T > 1.0e4):
+        rate = 4.0e-4*T**(-1.4)*np.exp(-15100./T)
+     else:
+        rate = 1.e-8*T**(-0.4)
      return rate
 
 
 #  ---18--       H2II  + e   -> 2HI
 def k18(T):
-    rate = 1.e-8
+    if (T > 617):
+        rate = 1.32e-6 * T ** (-0.76)
+    else:
+        rate = 1.e-8
     return rate
 
 

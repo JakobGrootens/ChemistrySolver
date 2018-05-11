@@ -11,17 +11,33 @@ def updater(t, state):
 
     HI = state[0]; HM = state[1]; HII = state[2]; HeI = state[3]
     HeII = state[4]; HeIII = state[5]; H2I = state[6]; H2II = state[7]
-
     #print(T)
     e = HII + HeII + 2*HeIII + H2II - HM
 
-    k1 = rr.k1(T); k2 = rr.k2(T); k3 = rr.k3(T)
-    k4 = rr.k4(T); k5 = rr.k5(T); k6 = rr.k6(T)
-    k7 = rr.k7(T); k8 = rr.k8(T); k9 = rr.k9(T)
-    k10 = rr.k10(T); k11 = rr.k11(T); k12 = rr.k12(T)
-    k13 = rr.k13(T); k14 = rr.k14(T); k15 = rr.k15(T)
-    k16 = rr.k16(T); k17 = rr.k17(T); k18 = rr.k18(T)
-    k19 = rr.k19(T); k57 = rr.k57(T); k58 = rr.k58(T)
+    T_eV = T / 11605.
+    log_T_eV = np.log(T_eV)
+
+    k1 = rr.k1(T, T_eV, log_T_eV)
+    k2 = rr.k2(T)
+    k3 = rr.k3(T, T_eV, log_T_eV)
+    k4 = rr.k4(T)
+    k5 = rr.k5(T, T_eV, log_T_eV)
+    k6 = rr.k6(T)
+    k7 = rr.k7(T)
+    k8 = rr.k8(T)
+    k9 = rr.k9(T)
+    k10 = rr.k10(T)
+    k11 = rr.k11(T, T_eV, log_T_eV)
+    k12 = rr.k12(T, T_eV)
+    k13 = rr.k13(T, T_eV)
+    k14 = rr.k14(T, T_eV, log_T_eV)
+    k15 = rr.k15(T, T_eV, log_T_eV)
+    k16 = rr.k16(T)
+    k17 = rr.k17(T)
+    k18 = rr.k18(T)
+    k19 = rr.k19(T)
+    k57 = rr.k57(T)
+    k58 = rr.k58(T)
 
     #Expressions made from RHSGenerator.py
     dHIdt =  H2I*HII*k11 + H2I*e*k12 - H2II*HI*k10 + H2II*HM*k19 + H2II*e*k18 - \
@@ -62,7 +78,7 @@ h_ionized_frac = -2
 he_ionized_frac = -5
 h_mol_ionized_frac = -2
 density = 10000
-final_t = 1000000
+final_t = 10000000
 safety_factor = 1000
 
 
