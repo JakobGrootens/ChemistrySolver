@@ -154,7 +154,7 @@ while integrator.t < final_t:
 
 
 
-#Graph values as a function of time
+#Graph state as a function of time
 state_vector_values = np.array(state_vector_values)
 ts = np.array(ts)
 plt.loglog(ts, state_vector_values[:,0], label='HI')

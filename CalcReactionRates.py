@@ -1,6 +1,7 @@
 ###########################
 # Reaction rate functions #
 ###########################
+import numpy as np
 
 #From Grackle Source (phys_constants.h)
 #Boltzmann constant
@@ -14,7 +15,6 @@ tiny =1.e-20
 
 gamma = 1.66
 
-import numpy as np
 #  ---1:--       HI    + e   -> HII   + 2e
 #  ---2:--       HII   + e   -> H     + p
 #  ---3:--       HeI   + e   -> HeII  + 2e

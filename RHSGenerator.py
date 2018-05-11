@@ -12,7 +12,7 @@ k21, k22, k19, k57, k58 = sympy.sympify(
 k11, k12, k13, k14, k15, k16, k17, k18,  \
 k21, k22, k19, k57, k58")
 
-#Define our reactions - sourced from Grackle paper
+#Define our reactions - sourced from Grackle 
 #  ---1:--       HI    + e   -> HII   + 2e
 r1 = (HI + e), (HII + e + e), k1
 
