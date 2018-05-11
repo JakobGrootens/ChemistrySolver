@@ -6,6 +6,7 @@ import numpy as np
 import time
 
 T = 0
+energy = 0
 
 def updater(t, state):
 
@@ -65,22 +66,21 @@ def updater(t, state):
 
 
 
-n_total = 5
-T = 30000.
 
+#n_total = input("Input N where 10^N is the initial number of H, He, and H2...")
 #h_ionized_frac = input("Input initial H ionization fraction...")
 #he_ionized_frac = input("Input initial He ionization fraction...")
 #h_mol_ionized_frac = input("Input initial molecular H ionization fraction...")
-#density = input("Input density")
+#T = input("Input temperature...")
 #final_t = input("Input time to evolve to...")
 
+n_total = 5
 h_ionized_frac = -6
 he_ionized_frac = -5
 h_mol_ionized_frac = -2
-density = 100
+T = 150000
 final_t = 1000000
 safety_factor = 100000
-
 
 n_HI_initial = 10**n_total * (1.0 - 10**h_ionized_frac)
 n_HM_initial = 0
@@ -96,15 +96,15 @@ n_e_initial = n_HII_initial + n_HeII_initial + n_H2II_initial
 state_vector = np.array([n_HI_initial, n_HM_initial, n_HII_initial, \
                          n_HeI_initial, n_HeII_initial, n_HeIII_initial, \
                          n_H2I_initial, n_H2II_initial, n_e_initial, T])
+energy = rr.energy_from_temp(state_vector, T)
 
 
+#Setup and run integrator until final_t
 integrator = sint.ode(updater)
-#integrator.set_integrator('vode',nsteps=50000,method='bdf')
 integrator.set_initial_value(state_vector, t=0)
 state_vector_values = []
 ts = []
 dt = final_t / safety_factor
-
 
 ts.append(integrator.t)
 state_vector_values.append(integrator.y)
@@ -117,13 +117,16 @@ while integrator.t < final_t:
     integrator.y[8] = integrator.y[2] + integrator.y[4] + 2*integrator.y[5] \
                     + integrator.y[7] - integrator.y[1]
 
-    T = rr.temperature(integrator.y, density, T)
+    T = rr.temperature(integrator.y, T, energy)
     #print(T)
     integrator.y[9] = T
 
     state_vector_values.append(integrator.y)
 
 
+
+
+#Graph values as a function of time
 state_vector_values = np.array(state_vector_values)
 ts = np.array(ts)
 plt.loglog(ts, state_vector_values[:,0], label='HI')
@@ -140,6 +143,6 @@ plt.loglog(ts, state_vector_values[:,9], label='T')
 mpl.style.use('seaborn')
 
 plt.xlabel("Time [s]")
-plt.ylabel("n")
+plt.ylabel("N")
 plt.legend()
 plt.savefig("simulation.png")

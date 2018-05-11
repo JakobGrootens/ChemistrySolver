@@ -12,7 +12,7 @@ mh = 1.67262171 * (10**-24)
 #Tiny
 tiny =1.e-20
 
-minimum_temperature = 1.0
+gamma = 1.66
 
 import numpy as np
 #  ---1:--       HI    + e   -> HII   + 2e
@@ -37,13 +37,23 @@ import numpy as np
 #  ---57--       HI    + HI  -> HII   + HI    + e
 #  ---58--       HI    + HeI -> HII   + HeI   + e
 
-
-def temperature(state, density, T):
+def energy_from_temp(state, T):
     HI = state[0]; HM = state[1]; HII = state[2]; HeI = state[3]
     HeII = state[4]; HeIII = state[5]; H2I = state[6]; H2II = state[7]
     e = state[8]
 
-    temperature_units = 5000000 * (1.66 - 1) * mh / kboltz
+    mu = (HI + HM + HII + 4*HeI + 4*HeII + 4*HeIII + 2*H2I + 2*H2II) / \
+         (HI + HM + HII + HeI + HeII + HeIII + H2I + H2II + e)
+
+    energy = (kboltz * T) / ((gamma - 1) * mu * mh)
+    return energy
+
+def temperature(state, T, energy):
+    HI = state[0]; HM = state[1]; HII = state[2]; HeI = state[3]
+    HeII = state[4]; HeIII = state[5]; H2I = state[6]; H2II = state[7]
+    e = state[8]
+
+    temperature_units = energy * (gamma - 1) * mh / kboltz
     mu = (HI + HM + HII + 4*HeI + 4*HeII + 4*HeIII + 2*H2I + 2*H2II) / \
          (HI + HM + HII + HeI + HeII + HeIII + H2I + H2II + e)
     return temperature_units * mu
