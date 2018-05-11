@@ -39,6 +39,8 @@ gamma = 1.66
 #  ---57--       HI    + HI  -> HII   + HI    + e
 #  ---58--       HI    + HeI -> HII   + HeI   + e
 
+#Calculates the internal energy for the system,
+#this is only called once at the beginning of the simulation.
 def energy_from_temp(state, T):
     HI = state[0]; HM = state[1]; HII = state[2]; HeI = state[3]
     HeII = state[4]; HeIII = state[5]; H2I = state[6]; H2II = state[7]
@@ -50,6 +52,8 @@ def energy_from_temp(state, T):
     energy = (kboltz * T) / ((gamma - 1) * mu * mh)
     return energy
 
+#Calculates the temperature every timestep, based on the energy
+#of the system, and the mean molecular weight of the system.
 def temperature(state, T, energy):
     HI = state[0]; HM = state[1]; HII = state[2]; HeI = state[3]
     HeII = state[4]; HeIII = state[5]; H2I = state[6]; H2II = state[7]
@@ -59,6 +63,7 @@ def temperature(state, T, energy):
     mu = (HI + HM + HII + 4*HeI + 4*HeII + 4*HeIII + 2*H2I + 2*H2II) / \
          (HI + HM + HII + HeI + HeII + HeIII + H2I + H2II + e)
     return temperature_units * mu
+
 
 #  ---1:--       HI    + e   -> HII   + 2e
 def k1(T, T_eV, log_T_eV):
