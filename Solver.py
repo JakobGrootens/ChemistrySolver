@@ -74,12 +74,12 @@ T = 30000.
 #density = input("Input density")
 #final_t = input("Input time to evolve to...")
 
-h_ionized_frac = -2
+h_ionized_frac = -1
 he_ionized_frac = -5
 h_mol_ionized_frac = -2
-density = 10000
-final_t = 10000000
-safety_factor = 1000
+density = 100
+final_t = 100000
+safety_factor = 10000
 
 
 n_HI_initial = 10**n_total * (1.0 - 10**h_ionized_frac)
@@ -99,6 +99,7 @@ state_vector = np.array([n_HI_initial, n_HM_initial, n_HII_initial, \
 
 
 integrator = sint.ode(updater)
+#integrator.set_integrator('vode',nsteps=50000,method='bdf')
 integrator.set_initial_value(state_vector, t=0)
 state_vector_values = []
 ts = []
@@ -116,9 +117,9 @@ while integrator.t < final_t:
     integrator.y[8] = integrator.y[2] + integrator.y[4] + 2*integrator.y[5] \
                     + integrator.y[7] - integrator.y[1]
 
-    # T = rr.temperature(integrator.y, density)
-    # print(T)
-    # integrator.y[9] = T
+    T = rr.temperature(integrator.y, density, T)
+    #print(T)
+    integrator.y[9] = T
 
     state_vector_values.append(integrator.y)
 

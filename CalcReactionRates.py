@@ -4,11 +4,15 @@
 
 #From Grackle Source (phys_constants.h)
 #Boltzmann constant
-kboltz = 1.38064852 * (10**-16)
+kboltz = 1.38064852 * (10**-23)
+#kboltz = 8.6173303 * 10**-5
+
 #Mass of hydrogen
 mh = 1.67262171 * (10**-24)
 #Tiny
 tiny =1.e-20
+
+minimum_temperature = 1.0
 
 import numpy as np
 #  ---1:--       HI    + e   -> HII   + 2e
@@ -34,18 +38,16 @@ import numpy as np
 #  ---58--       HI    + HeI -> HII   + HeI   + e
 
 
-def temperature(state, density):
+def temperature(state, density, T):
     HI = state[0]; HM = state[1]; HII = state[2]; HeI = state[3]
     HeII = state[4]; HeIII = state[5]; H2I = state[6]; H2II = state[7]
     e = state[8]
-    T = state[9]
 
     #Derived from Grackle source (calculate_temperature.c)
-    temperature_units = mh / kboltz
-    mu = density * (.25 * (HeI + HeII + HeIII + HI + HII + e)) + \
-                   (HM + .5*(H2I + H2II))
-
-    return T * temperature_units * mu
+    temperature_units = 5000000 * (1.66 - 1) * mh / kboltz
+    mu = (2*HI + 2*HM + 2*HII + 4*HeI + 4*HeII + 4*HeIII + 4*H2I + 4*H2II) / \
+         ((2*HI + 2*HM + 2*HII + 4*HeI + 4*HeII + 4*HeIII + 4*H2I + 4*H2II) + e)
+    return temperature_units * mu
 
 #  ---1:--       HI    + e   -> HII   + 2e
 def k1(T, T_eV, log_T_eV):
@@ -68,7 +70,7 @@ def k2(T):
     if(T < 1.0e9):
         rate = 4.881357e-6*T**(-1.5)* (1.+1.14813e2 * T**(-0.407))**(-2.242)
     else:
-        k2 = tiny
+        rate = tiny
     return rate
 
 
@@ -204,7 +206,7 @@ def k14(T, T_eV, log_T_eV):
                  + 0.0001068275202678*log_T_eV**7
                  - 2.631285809207e-6*log_T_eV**8)
     else:
-        k14 = tiny
+        rate = tiny
     return rate
 
 
