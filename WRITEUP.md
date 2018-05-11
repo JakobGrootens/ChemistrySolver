@@ -24,7 +24,8 @@ little chemistry experience. Additionally, Grackle goes much more in depth with
 their calculations than we do, so a large amount of the time I spent on the
 project was simply reading PDFs and the Grackle source to try and figure out
 what exactly I needed and what I did not.  
-<br><br>
+
+<br>
 #### Speed and Equilibrium
 As seen in [HighTemp.png](https://github.com/JakobGrootens/ChemistrySolver/blob/master/HighTemp.png) and [LowTemp.png](https://github.com/JakobGrootens/ChemistrySolver/blob/master/LowTemp.png), having a higher temperature
 creates a much more dynamic simulation with high rates of change. Conversely,
@@ -32,7 +33,8 @@ a low temperature results in relatively little change over the course of the
 simulation. In both cases though, the species start in somewhat of an equilibrium,
 change a great deal in the middle of the simulation, and then even out towards
 an equilibrium at the end.
-<br><br>
+
+<br>
 #### Interesting Regions
 One region of particular interest is in the [high temperature simulation](https://github.com/JakobGrootens/ChemistrySolver/blob/master/HighTemp.png)
 between T = 10^4 and 10^6. It is a moment where the simulation shifts very quickly
