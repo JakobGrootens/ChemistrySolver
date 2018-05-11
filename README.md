@@ -4,7 +4,7 @@
 This is a Nine Species Chemistry simulator for ASTR498 - Computational Astrophysics.
 <br><br>
 #### Solver.py  
-A simulator that takes H, He, and H2 ionization fractions, a time to evolve to, and density. This will integrate until the specified time and produce an output "simulation.png" showing how the values change for each species (and Temperature).
+The main simulator. This will integrate until the specified time and produce an output "simulation.png" showing how the values change for each species (and Temperature).
 
 Add the "-v" flag to specify initial values, otherwise default values will be used.
 <br><br>
