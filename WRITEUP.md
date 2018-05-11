@@ -26,7 +26,7 @@ project was simply reading PDFs and the Grackle source to try and figure out
 what exactly I needed and what I did not.  
 <br>
 #### Speed and Equilibrium
-As seen in [HighTemp.png](https://github.com/JakobGrootens/ChemistrySolver/blob/master/HighTemp.png) and [LowTemp.png](), having a higher temperature
+As seen in [HighTemp.png](https://github.com/JakobGrootens/ChemistrySolver/blob/master/HighTemp.png) and [LowTemp.png](https://github.com/JakobGrootens/ChemistrySolver/blob/master/LowTemp.png), having a higher temperature
 creates a much more dynamic simulation with high rates of change. Conversely,
 a low temperature results in relatively little change over the course of the
 simulation. In both cases though, the species start in somewhat of an equilibrium,
