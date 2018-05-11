@@ -74,12 +74,12 @@ T = 30000.
 #density = input("Input density")
 #final_t = input("Input time to evolve to...")
 
-h_ionized_frac = -1
+h_ionized_frac = -6
 he_ionized_frac = -5
 h_mol_ionized_frac = -2
 density = 100
-final_t = 100000
-safety_factor = 10000
+final_t = 1000000
+safety_factor = 100000
 
 
 n_HI_initial = 10**n_total * (1.0 - 10**h_ionized_frac)

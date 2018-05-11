@@ -46,7 +46,7 @@ def temperature(state, density, T):
     #Derived from Grackle source (calculate_temperature.c)
     temperature_units = 5000000 * (1.66 - 1) * mh / kboltz
     mu = (2*HI + 2*HM + 2*HII + 4*HeI + 4*HeII + 4*HeIII + 4*H2I + 4*H2II) / \
-         ((2*HI + 2*HM + 2*HII + 4*HeI + 4*HeII + 4*HeIII + 4*H2I + 4*H2II) + e)
+         (HI + HM + HII + HeI + HeII + HeIII + H2I + H2II + e)
     return temperature_units * mu
 
 #  ---1:--       HI    + e   -> HII   + 2e
