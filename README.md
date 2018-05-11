@@ -19,4 +19,4 @@ Add the "-v" flag to specify initial values, otherwise these default values will
 Helper functions for Solver.py to compute each of the reaction rates for a given temperature.
 
 #### RHSGenerator.py
-A right hand side generator for the nine species of H and He, based on reactions 1-19, 57, and 58 (numbering from with Abel et al. (1997)).
+A right hand side generator for the nine species of H and He, based on reactions 1-22, 57, and 58 (numbering from with Abel et al. (1997)).
