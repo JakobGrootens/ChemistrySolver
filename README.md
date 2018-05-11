@@ -14,8 +14,7 @@ Add the "-v" flag to specify initial values, otherwise these default values will
 * T = 150000
 * final_t = 1000000
 * safety_factor = 100000
-
-<br>
+<br><br>
 #### CalcReactionRates.py
 Helper functions for Solver.py to compute each of the reaction rates for a given temperature.
 
