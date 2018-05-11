@@ -24,7 +24,7 @@ little chemistry experience. Additionally, Grackle goes much more in depth with
 their calculations than we do, so a large amount of the time I spent on the
 project was simply reading PDFs and the Grackle source to try and figure out
 what exactly I needed and what I did not.  
-<br><br>
+<br>
 #### Speed and Equilibrium
 As seen in [HighTemp.png](https://github.com/JakobGrootens/ChemistrySolver/blob/master/HighTemp.png) and [LowTemp.png](), having a higher temperature
 creates a much more dynamic simulation with high rates of change. Conversely,
