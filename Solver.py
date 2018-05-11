@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import matplotlib as mpl
 import numpy as np
 import time
+import sys
 
 T = 0
 energy = 0
@@ -41,6 +42,7 @@ def calculate_reactionrates(T):
     k11, k12, k13, k14, k15, k16, k17, k18,  \
     k21, k22, k19, k57, k58
 
+
 #Calculates the change in species for each slice
 def updater(t, state):
 
@@ -75,21 +77,30 @@ def updater(t, state):
 
 
 
-#n_total = input("Input N where 10^N is the initial number of H, He, and H2...")
-#h_ionized_frac = input("Input initial H ionization fraction...")
-#he_ionized_frac = input("Input initial He ionization fraction...")
-#h_mol_ionized_frac = input("Input initial molecular H ionization fraction...")
-#T = input("Input temperature...")
-#final_t = input("Input time to evolve to...")
+#Get user input if -v flag is specified
+if(len(sys.argv) > 1):
+    if(sys.argv[1] == "-v"):
+        n_total = input("Input N where 10^N is the initial number of H, He, and H2...")
+        h_ionized_frac = input("Input initial H ionization fraction...")
+        he_ionized_frac = input("Input initial He ionization fraction...")
+        h_mol_ionized_frac = input("Input initial molecular H ionization fraction...")
+        T = input("Input temperature...")
+        final_t = input("Input time to evolve to...")
+        safety_factor = input("Input safety factor... ")
+    else:
+        print("Invalid flag!\nExiting...")
+        exit(1)
+#Otherwise default to some values
+else:
+    n_total = 5
+    h_ionized_frac = -6
+    he_ionized_frac = -5
+    h_mol_ionized_frac = -2
+    T = 150000
+    final_t = 1000000
+    safety_factor = 100000
 
-n_total = 5
-h_ionized_frac = -6
-he_ionized_frac = -5
-h_mol_ionized_frac = -2
-T = 150000
-final_t = 1000000
-safety_factor = 100000
-
+#Initialize our state and calculate energy
 n_HI_initial = 10**n_total * (1.0 - 10**h_ionized_frac)
 n_HM_initial = 0
 n_HII_initial = 10**n_total * 10**h_ionized_frac
